@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nginx-claim
+spec:
+  resources:
+    requests:
+      storage: 1G
+  storageClassName: nginx-storage
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce  #ReadOnlyMany.  #ReadWriteMany
+  
+
+  
+
+  

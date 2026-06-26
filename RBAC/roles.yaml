@@ -1,0 +1,35 @@
+# roles.yaml
+
+# ------- ROLE 1: dev-team — deploy and view, no delete -------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dev-team-role
+  namespace: production
+rules:
+- apiGroups: ["", "apps"]
+  resources: ["pods", "deployments", "services", "configmaps"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get"]
+---
+# ------- ROLE 2: readonly-team — only view, nothing else -------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: readonly-role
+rules:
+- apiGroups: ["", "apps"]
+  resources: ["pods", "deployments", "services", "namespaces", "nodes"]
+  verbs: ["get", "list", "watch"]
+---
+# ------- ROLE 3: deployers (cicd) — only update deployments -------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: deployer-role
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "update", "patch"]

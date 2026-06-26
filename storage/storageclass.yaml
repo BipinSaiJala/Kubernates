@@ -1,0 +1,7 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nginx-storage         # we'll reference this name in the PVC
+provisioner: k8s.io/minikube-hostpath  # Minikube's local disk provisioner
+reclaimPolicy: Delete         # when PVC is deleted, storage is deleted too
+volumeBindingMode: Immediate

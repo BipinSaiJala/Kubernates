@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - name: webapp
+          image: nginx:1.24
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: tls-cert
+              mountPath: /etc/tls        # TLS cert from cert-manager Secret
+              readOnly: true
+            - name: persistent-storage
+              mountPath: /var/log/nginx  # nginx logs will persist here
+                                         # survives pod restarts
+
+      volumes:
+        - name: tls-cert
+          secret:
+            secretName: my-tls-secret   # same cert-manager Secret as before
+
+        - name: persistent-storage
+          persistentVolumeClaim:
+            claimName: webapp-storage   # the PVC we just created

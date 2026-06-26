@@ -1,0 +1,58 @@
+# rolebindings.yaml
+
+# ------- BINDING 1: dev-team group → dev-team-role -------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dev-team-binding
+  namespace: production
+subjects:
+- kind: Group
+  name: dev-team          # matches O=dev-team in alice's certificate
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: dev-team-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# ------- BINDING 2: devops-team group → cluster-admin -------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: devops-team-binding
+subjects:
+- kind: Group
+  name: devops-team       # matches O=devops-team in bob's certificate
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin     # built-in K8s full admin role
+  apiGroup: rbac.authorization.k8s.io
+---
+# ------- BINDING 3: readonly-team group → readonly-role -------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: readonly-team-binding
+subjects:
+- kind: Group
+  name: readonly-team     # matches O=readonly-team in charlie's certificate
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: readonly-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# ------- BINDING 4: deployers group → deployer-role -------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: deployers-binding
+subjects:
+- kind: Group
+  name: deployers         # matches O=deployers in cicd-bot's certificate
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: deployer-role
+  apiGroup: rbac.authorization.k8s.io

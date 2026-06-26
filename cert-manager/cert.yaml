@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: my-local-cert
+  namespace: default
+spec:
+  secretName: my-tls-secret        # cert-manager will CREATE this Secret automatically
+  duration: 2160h                  # certificate valid for 90 days
+  renewBefore: 360h                # auto-renew 15 days before expiry
+  subject:
+    organizations:
+      - MyLocalBank
+  dnsNames:
+    - myapp.local                  # domain this cert covers
+  issuerRef:
+    name: selfsigned-issuer        # points to the Issuer we just created
+    kind: Issuer
