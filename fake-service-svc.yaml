@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fake-service
+  namespace: default
+  labels:
+    app: fake-service      # ServiceMonitor will match this label
+spec:
+  selector:
+    app: fake-service      # routes traffic to pods with this label
+  ports:
+    - name: http           # named port — ServiceMonitor uses this name
+      port: 9090
+      targetPort: http

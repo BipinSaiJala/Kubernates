@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fake-service
+  namespace: default
+  labels:
+    app: fake-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fake-service
+  template:
+    metadata:
+      labels:
+        app: fake-service
+    spec:
+      containers:
+        - name: fake-service
+          image: nicholasjackson/fake-service:v0.26.2
+          ports:
+            - name: http
+              containerPort: 9090
+          env:
+            - name: LISTEN_ADDR
+              value: "0.0.0.0:9090"
+            - name: NAME
+              value: "fake-service"
+            - name: MESSAGE
+              value: "Hello from fake-service"
+            - name: ERROR_RATE
+              value: "0.2"        # 20% of requests will return errors
+            - name: ERROR_CODE
+              value: "500"
+            - name: TIMING_50_PERCENTILE
+              value: "20ms"       # 50% of requests take 20ms
+            - name: TIMING_90_PERCENTILE
+              value: "200ms"      # 90% of requests take 200ms
+            - name: TIMING_99_PERCENTILE
+              value: "800ms"      # 99% of requests take 800ms
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi

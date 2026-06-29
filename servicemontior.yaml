@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: fake-service-monitor
+  namespace: monitoring
+  labels:
+    release: prometheus    # CRITICAL — Operator only picks up monitors with this label
+spec:
+  namespaceSelector:
+    matchNames:
+      - default            # our app lives in default namespace
+  selector:
+    matchLabels:
+      app: fake-service    # matches the Service we created above
+  endpoints:
+    - port: http           # matches the named port in the Service
+      path: /metrics       # where fake-service exposes its metrics
+      interval: 15s
